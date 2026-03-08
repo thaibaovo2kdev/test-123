@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const letterLines = [
-    'Chúc em một ngày 8/3 thật hạnh phúc.',
+    'Chúc em một ngày 8/3 thật hạnh phúc, ngày càng xinh đẹp, iu anh hơn nữa ❤️',
     'Cảm ơn em vì đã luôn ở bên anh.',
     'Mong là tụi mình sẽ mãi ở bên nhau, cùng nhau đi hết con đường phía trước.',
     'Anh iu emmmm ❤️',
