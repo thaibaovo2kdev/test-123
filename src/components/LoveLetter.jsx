@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, useInView } from 'framer-motion'
+import audioSrc from '../assets/audio.mp3'
 
 const letterLines = [
     'Chúc em một ngày 8/3 thật hạnh phúc, ngày càng xinh đẹp, iu anh hơn nữa ❤️',
@@ -72,6 +73,30 @@ export default function LoveLetter() {
     }, [])
 
     const allLinesComplete = activeLineIndex >= letterLines.length
+    const audioRef = useRef(null)
+
+    // Auto-play audio when all lines finish typing
+    useEffect(() => {
+        if (allLinesComplete && !audioRef.current) {
+            const audio = new Audio(audioSrc)
+            audio.volume = 0.7
+            audio.loop = true
+            audioRef.current = audio
+            audio.play().catch(() => {
+                // If autoplay blocked, play on next user interaction
+                const playOnInteraction = () => {
+                    audio.play()
+                    document.removeEventListener('click', playOnInteraction)
+                    document.removeEventListener('touchstart', playOnInteraction)
+                }
+                document.addEventListener('click', playOnInteraction)
+                document.addEventListener('touchstart', playOnInteraction)
+            })
+        }
+        return () => {
+            // Don't stop audio on unmount — let it keep playing
+        }
+    }, [allLinesComplete])
 
     return (
         <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center section-padding overflow-hidden gap-4">
