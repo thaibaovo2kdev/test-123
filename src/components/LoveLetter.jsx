@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const letterLines = [
@@ -8,30 +8,34 @@ const letterLines = [
     'Anh iu emmmm ❤️',
 ]
 
-function TypingLine({ text, delay, isInView: visible }) {
+function TypingLine({ text, isActive, onComplete }) {
     const [displayed, setDisplayed] = useState('')
     const [showCursor, setShowCursor] = useState(false)
     const [done, setDone] = useState(false)
 
     useEffect(() => {
-        if (!visible) return
-        const startTimeout = setTimeout(() => {
-            setShowCursor(true)
-            let i = 0
-            const interval = setInterval(() => {
-                if (i < text.length) {
-                    setDisplayed(text.slice(0, i + 1))
-                    i++
-                } else {
-                    clearInterval(interval)
-                    setDone(true)
-                    setTimeout(() => setShowCursor(false), 1000)
-                }
-            }, 50)
-            return () => clearInterval(interval)
-        }, delay)
-        return () => clearTimeout(startTimeout)
-    }, [text, delay, visible])
+        if (!isActive || done) return
+        setShowCursor(true)
+        let i = 0
+        const interval = setInterval(() => {
+            if (i < text.length) {
+                setDisplayed(text.slice(0, i + 1))
+                i++
+            } else {
+                clearInterval(interval)
+                setDone(true)
+                setTimeout(() => {
+                    setShowCursor(false)
+                    onComplete?.()
+                }, 600)
+            }
+        }, 50)
+        return () => clearInterval(interval)
+    }, [text, isActive, done, onComplete])
+
+    if (!isActive && !done) {
+        return <p className="text-base sm:text-lg md:text-xl leading-relaxed mb-4 min-h-[1.6em]" />
+    }
 
     return (
         <p
@@ -53,6 +57,21 @@ function TypingLine({ text, delay, isInView: visible }) {
 export default function LoveLetter() {
     const sectionRef = useRef(null)
     const isInView = useInView(sectionRef, { once: true, amount: 0.3 })
+    const [activeLineIndex, setActiveLineIndex] = useState(-1)
+
+    // Start the first line after section comes into view
+    useEffect(() => {
+        if (isInView && activeLineIndex === -1) {
+            const timer = setTimeout(() => setActiveLineIndex(0), 1000)
+            return () => clearTimeout(timer)
+        }
+    }, [isInView, activeLineIndex])
+
+    const handleLineComplete = useCallback(() => {
+        setActiveLineIndex((prev) => prev + 1)
+    }, [])
+
+    const allLinesComplete = activeLineIndex >= letterLines.length
 
     return (
         <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center section-padding overflow-hidden gap-4">
@@ -132,14 +151,14 @@ export default function LoveLetter() {
                         Gửi em yêu,
                     </motion.p>
 
-                    {/* Typing lines */}
+                    {/* Typing lines — sequential */}
                     <div className="space-y-2">
                         {letterLines.map((line, i) => (
                             <TypingLine
                                 key={i}
                                 text={line}
-                                delay={1000 + i * 2500}
-                                isInView={isInView}
+                                isActive={i === activeLineIndex}
+                                onComplete={handleLineComplete}
                             />
                         ))}
                     </div>
@@ -148,8 +167,8 @@ export default function LoveLetter() {
                     <motion.div
                         className="mt-10 text-right"
                         initial={{ opacity: 0 }}
-                        animate={isInView ? { opacity: 1 } : {}}
-                        transition={{ delay: 12 }}
+                        animate={allLinesComplete ? { opacity: 1 } : {}}
+                        transition={{ duration: 1, delay: 0.3 }}
                     >
                         <p className="text-lg md:text-xl italic" style={{ fontFamily: 'var(--font-script)', color: 'rgba(255,107,138,0.6)' }}>
                             Mãi yêu em,
@@ -171,8 +190,8 @@ export default function LoveLetter() {
                 className="mt-16 text-center relative"
                 style={{ zIndex: 2 }}
                 initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ delay: 13, duration: 1 }}
+                animate={allLinesComplete ? { opacity: 1 } : {}}
+                transition={{ delay: 0.8, duration: 1 }}
             >
                 <motion.div
                     className="text-4xl mb-4"

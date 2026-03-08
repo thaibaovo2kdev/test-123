@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function CursorEffects() {
     const canvasRef = useRef(null)
@@ -86,77 +86,8 @@ export default function CursorEffects() {
         }
     }, [isMobile])
 
-    // Mobile: Touch sparkle effect
-    const handleTouch = useCallback((e) => {
-        if (!isMobile) return
-        const canvas = canvasRef.current
-        if (!canvas) return
-        const ctx = canvas.getContext('2d')
-
-        const touch = e.touches?.[0] || e.changedTouches?.[0]
-        if (!touch) return
-
-        const x = touch.clientX
-        const y = touch.clientY
-
-        // Create sparkle burst
-        const sparkles = []
-        for (let i = 0; i < 8; i++) {
-            const angle = (i / 8) * Math.PI * 2
-            sparkles.push({
-                x, y,
-                vx: Math.cos(angle) * (2 + Math.random() * 2),
-                vy: Math.sin(angle) * (2 + Math.random() * 2),
-                life: 1,
-                size: 8 + Math.random() * 10,
-                color: ['#ff6b8a', '#ffd700', '#c9a0dc', '#f8c8d4'][Math.floor(Math.random() * 4)],
-            })
-        }
-
-        let frame = 0
-        const maxFrames = 40
-        const animateSparkle = () => {
-            if (frame > maxFrames) return
-            frame++
-
-            sparkles.forEach((s) => {
-                s.x += s.vx
-                s.y += s.vy
-                s.vy += 0.05
-                s.life -= 1 / maxFrames
-
-                ctx.save()
-                ctx.globalAlpha = s.life
-                ctx.font = `${s.size * s.life}px serif`
-                ctx.fillText('✨', s.x, s.y)
-                ctx.restore()
-            })
-
-            requestAnimationFrame(animateSparkle)
-        }
-        animateSparkle()
-    }, [isMobile])
-
-    useEffect(() => {
-        if (!isMobile) return
-        const canvas = canvasRef.current
-        if (!canvas) return
-
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-
-        const resize = () => {
-            canvas.width = window.innerWidth
-            canvas.height = window.innerHeight
-        }
-        window.addEventListener('resize', resize)
-        document.addEventListener('touchstart', handleTouch)
-
-        return () => {
-            window.removeEventListener('resize', resize)
-            document.removeEventListener('touchstart', handleTouch)
-        }
-    }, [isMobile, handleTouch])
+    // On mobile, don't render canvas at all
+    if (isMobile) return null
 
     return (
         <canvas

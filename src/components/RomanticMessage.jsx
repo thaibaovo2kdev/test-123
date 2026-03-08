@@ -107,7 +107,7 @@ export default function RomanticMessage() {
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 1.2, delay: 0.6 }}
                 >
-                    Cuộc sống của anh trở nên đẹp hơn từ khi có em.
+                    Trải qua nhiều thăng trầm mà vẫn ở cạnh anh đến lúc này.
                 </motion.p>
 
                 {/* Decorative closing quote */}

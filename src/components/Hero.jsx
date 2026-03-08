@@ -120,7 +120,7 @@ export default function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.5, duration: 1 }}
                 >
-                    For the most special girl in my life
+                    Gửi cho ngiu xinh gái của anh ❤️
                 </motion.p>
 
                 {/* Decorative line */}
