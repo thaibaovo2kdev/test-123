@@ -57,7 +57,7 @@ function TypingLine({ text, isActive, onComplete }) {
 
 export default function LoveLetter() {
     const sectionRef = useRef(null)
-    const isInView = useInView(sectionRef, { once: true, amount: 0.3 })
+    const isInView = useInView(sectionRef, { once: true, amount: 0.1 })
     const [activeLineIndex, setActiveLineIndex] = useState(-1)
 
     // Start the first line after section comes into view
