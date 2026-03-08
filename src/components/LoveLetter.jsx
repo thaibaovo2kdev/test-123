@@ -228,7 +228,7 @@ export default function LoveLetter() {
                     ❤️
                 </motion.div>
                 <p className="text-sm" style={{ color: 'rgba(248,200,212,0.4)', fontFamily: 'var(--font-sans)' }}>
-                    Happy Women&apos;s Day 2026
+                    Đọc hết gòi thì lướt xuống cái nữa - có bất ngờ cho em đó nhaaa
                 </p>
             </motion.div>
         </section>
