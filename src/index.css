@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rose-soft: #f8c8d4;
+  --color-rose-deep: #e8879b;
+  --color-rose-glow: #ff6b8a;
+  --color-purple-soft: #d4b8e8;
+  --color-purple-pastel: #c9a0dc;
+  --color-purple-deep: #9b59b6;
+  --color-gold-light: #f5e6c8;
+  --color-gold-shimmer: #ffd700;
+  --color-cream: #fff5f7;
+  --color-blush: #fce4ec;
+  --color-midnight: #1a0a1e;
+  --color-midnight-soft: #2d1535;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-script: 'Dancing Script', cursive;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(180deg, #1a0a1e 0%, #2d1535 50%, #1a0a1e 100%);
+  color: #fff5f7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a0a1e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #e8879b, #9b59b6);
+  border-radius: 2px;
+}
+
+/* Glass card utility */
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+}
+
+.glass-card-strong {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(232, 135, 155, 0.15);
+}
+
+/* Text gradient utility */
+.text-gradient-rose {
+  background: linear-gradient(135deg, #f8c8d4 0%, #ff6b8a 50%, #e8879b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #f5e6c8 0%, #ffd700 50%, #f5e6c8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects */
+.glow-rose {
+  box-shadow: 0 0 30px rgba(255, 107, 138, 0.3), 0 0 60px rgba(255, 107, 138, 0.1);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(255, 107, 138, 0.5), 0 0 40px rgba(255, 107, 138, 0.2);
+}
+
+/* Floating animation */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+
+  75% {
+    transform: translateY(5px) rotate(-1deg);
+  }
+}
+
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle {
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scroll-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateY(12px);
+    opacity: 0.5;
+  }
+}
+
+@keyframes typing-cursor {
+
+  0%,
+  50% {
+    border-right-color: rgba(255, 107, 138, 0.8);
+  }
+
+  51%,
+  100% {
+    border-right-color: transparent;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-scroll-bounce {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* Petal shapes */
+.petal {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(ellipse, #f8c8d4 0%, #ff6b8a 60%, transparent 70%);
+  border-radius: 50% 0 50% 0;
+  animation: fall linear infinite;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Section spacing */
+.section-padding {
+  padding: 100px 24px;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 140px 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding: 180px 80px;
+  }
+}
+
+/* Section divider */
+.section-divider {
+  width: 60px;
+  height: 1px;
+  margin: 0 auto;
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 138, 0.3), transparent);
+}
+
+/* Better mobile text sizing */
+@media (max-width: 375px) {
+  .section-padding {
+    padding: 80px 16px;
+  }
+}
