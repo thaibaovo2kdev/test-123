@@ -68,35 +68,37 @@ export default function LoveLetter() {
         }
     }, [isInView, activeLineIndex])
 
-    const handleLineComplete = useCallback(() => {
-        setActiveLineIndex((prev) => prev + 1)
-    }, [])
-
-    const allLinesComplete = activeLineIndex >= letterLines.length
     const audioRef = useRef(null)
 
-    // Auto-play audio when all lines finish typing
-    useEffect(() => {
-        if (allLinesComplete && !audioRef.current) {
-            const audio = new Audio(audioSrc)
-            audio.volume = 0.7
-            audio.loop = true
-            audioRef.current = audio
-            audio.play().catch(() => {
-                // If autoplay blocked, play on next user interaction
-                const playOnInteraction = () => {
-                    audio.play()
-                    document.removeEventListener('click', playOnInteraction)
-                    document.removeEventListener('touchstart', playOnInteraction)
-                }
-                document.addEventListener('click', playOnInteraction)
-                document.addEventListener('touchstart', playOnInteraction)
-            })
-        }
-        return () => {
-            // Don't stop audio on unmount — let it keep playing
-        }
-    }, [allLinesComplete])
+    const playAudio = useCallback(() => {
+        if (audioRef.current) return
+        const audio = new Audio(audioSrc)
+        audio.volume = 0.7
+        audio.loop = true
+        audioRef.current = audio
+        audio.play().catch(() => {
+            const playOnInteraction = () => {
+                audio.play()
+                document.removeEventListener('click', playOnInteraction)
+                document.removeEventListener('touchstart', playOnInteraction)
+            }
+            document.addEventListener('click', playOnInteraction)
+            document.addEventListener('touchstart', playOnInteraction)
+        })
+    }, [])
+
+    const handleLineComplete = useCallback(() => {
+        setActiveLineIndex((prev) => {
+            const next = prev + 1
+            // When last line finishes, play audio immediately
+            if (next >= letterLines.length) {
+                playAudio()
+            }
+            return next
+        })
+    }, [playAudio])
+
+    const allLinesComplete = activeLineIndex >= letterLines.length
 
     return (
         <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center section-padding overflow-hidden gap-4">
